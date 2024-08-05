@@ -98,7 +98,6 @@ int debugger_main(void){
         }
         else if(data[0] == 'H' && data[1] == 'W' && data[2] == 'I' && data[3] == 'O') {
             //HWIO, write byte by byte
-            //
             recv_data(&data, 0x20); 
             mem_off = *(uint32_t *)data;
             mem_sz = *(uint32_t *)(data+8);
