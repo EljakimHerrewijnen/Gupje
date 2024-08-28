@@ -136,10 +136,8 @@ dump_special_el3:
     MRS X0, MAIR_EL3
     STR X0, [X15, #424]
 
-    // Also dump el2, el1
-    BL dump_special_el2
-    BL dump_special_el1
-    RET
+    // Also dump el2, which will also dump el1
+    B dump_special_el2
 
 .text
 .global dump_special_el2
@@ -169,8 +167,7 @@ dump_special_el2:
     STR X0, [X15, #432]
 
     // also dump EL1
-    BL dump_special_el1
-    RET
+    B dump_special_el1
 
 .text
 .global dump_special_el1
@@ -346,7 +343,7 @@ debugger_sync_special_regs:
 .text
 .global debugger_dump_special_regs
 debugger_dump_special_regs:
-    BL dump_special_regs
+     BL dump_special_regs
     B debugger_main
 
 .text
