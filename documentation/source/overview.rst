@@ -10,21 +10,22 @@ A high level overview of how the memory mapping for this works is shown below.
 
     In the future the debugger will probably grow to 4 pages, to include an extra page for the debugger to use in custom functionality.
 
-Features
-========
-In a typical usecase the flow of the debugger wuuld look as something like this:
+Inner workings
+--------------
+When the debugger is entered it will save the state of the processor into it's storage page. This is done in assembly and is architecture dependent.
+When a new architecture is added the first thing that needs to be done is to implement these functionalities.
 
 .. figure:: images/debugger_flow.drawio.svg
 
-State saving
-------------
-Function: ``On enter``
+The debugger will then wait for commands from the host. The host can send commands to the debugger to read/write memory, jump to an address, etc.
 
-The first thing the debugger does when it enters is save it's state into it's storage page. 
-The state being all the General Purpose registers and some special register, like the stack pointer and link register.
-The stack pointer is overwritten to the debugger stack, in order to not taint the original stack.
-This is architecture dependent and written in Assembly. 
-See the documentation in each architecture on how this is performed and if data is lost.
+When the user is done it will send the ``REST`` command to the debugger. This will restore the state of the processor and jump to the address defined in ``DEBUGGER_JUMP``.
+
+The debugger also uses a stack that is defined in the debugger. This is done to not taint the original stack of the processor.
+
+API
+===
+The debugger has a simple API that is used to communicate with the device. The following commands are supported:
 
 Memory Read(Peek)
 -----------------
@@ -50,7 +51,7 @@ Execute architecture specific instructions in order to flush the cache.
 
 .. note::
 
-    Only arm64 is supported for this function. The support is there for arm and thumb but not implemented.
+    Only arm64 is supported for this function. The support is there for arm and thumb but not implemented. Probably there will be a change here to support data/code cache flushes.
 
 Jump to address(JUMP)
 ---------------------
@@ -83,9 +84,17 @@ This function restores the state of the processor from it's internal storage and
 
 Restore and Return(RRET)
 ------------------------
-Does the same as ``Restore and Jump`` but instead of jumping it returns to the address that called the debugger.
+Does the same as ``Restore and Jump`` but instead of jumping it returns to the address that called the debugger(LR).
+
+
 
 Glitching
 =========
 A debug flag is added for adding glitching to the debugger. The command ``GLIT`` will jump to the glitch function but this is not very well implemented yet. 
 The goal is to add several testable glitch cases to the debugger for profiling.
+
+
+
+Features
+========
+In a typical usecase the flow of the debugger would look as something like this:

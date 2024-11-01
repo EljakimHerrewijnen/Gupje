@@ -1,5 +1,5 @@
 # Gupje
-Gupje is a bare metal architecture based stub debugger that helps in post-exploitation steps. Like booting a device after RCE has been achieved. Gupje is also capable of doing hardware-in-the-middle approaches as well as keeping control over a device while it is booting(Hijack trustzone etc.). 
+Gupje is a bare metal architecture based stub debugger that helps in ``post-exploitation`` steps. Like booting a smartphone after RCE has been achieved. Gupje is also capable of doing ``hardware-in-the-middle`` approaches as well as keeping control over a device while it is booting(Hijack trustzone etc.).
 
 Gupje currently supporting the following architectures:
     * ARM64 (good support)
@@ -10,7 +10,7 @@ The goal is to add support to more targets while I work on them. Because I mainl
 
 The only actual things the debugger can do is:
     * Send/Receive (needs to be implemented by the user)
-    * Read/Write registers
+    * Read/Write *some* registers
 
 These functions are enough for a processor to run properly. The code size of the debugger is currently smaller than 4096 bytes(depends a bit on user setup) but will probably grow to include 1 extra page to support custom functionality. Like dumping extra registers and more specific VBAR setups. 
 
@@ -21,10 +21,12 @@ A simple overview of how Gupje is meant to be used can be seen below:
 
 ![Simple Gupje Target](simple_device.drawio.svg)
 
-The user is responsible for gaining RCE and setting up Gupje. After this Gupje along with the ``Ghidra-Assistant`` can be used to interact with the device from within python and continue booting. 
+The user is responsible for gaining RCE and setting up Gupje. After this Gupje, along with the ``Ghidra-Assistant``, can be used to interact with the device from within python and continue booting(or extract Crypte Engine keys or whatever).
 
 ### Gupje Setup
 Because Gupje attempts to be a architecture based debugger the user only has to provide send/receive functionality to Gupje. Like sahara_tx/sahara_rx in Qualcomm based devices or a raw USB endpoint for the nvidia shield tablet.
+
+Example C code for running gupje:
 
 ```c
 
@@ -67,10 +69,21 @@ void concrete_main(uint32_t debugger){
 }
 ```
 
+#### Building
+Download an Android NDK and set it's root path:
+```bash
+$ export ANDROID_NDK_ROOT=$TOOLCHAINENV/android-ndk-r21_Linux
+```
+
+Now you can build one of your targets:
+```bash
+$ make -f devices/rpi4/Makefile
+```
+
 Other protocols, like UART, are also possible. I will try to add more reference devices and implementations. 
 
 ### Memory layout
-Overall 4 pages are always reserved for the debugger. I usually try to place them at the end of a memory region since the chance of the pages being corrupted/used by other functions is smaller. 3 pages are required at least for the debugger to function properly.
+Overall 4 pages are always reserved for the debugger. I usually try to place them at the end of a memory region since the chance of these pages being corrupted/used by other functions is smaller. 3 pages are required at least for the debugger to function properly.
 
 ![debugger memory layout](simple_device_memory.drawio.svg)
 
@@ -79,11 +92,19 @@ The full documentation is covered in the ``documentation`` folder. To build it, 
 ```bash
 make livehtml
 ```
-Install the python dependencies if they are missing. (TODO add requirements)
+Install the python dependencies if they are missing. 
 
 This code works in combination with the ``Ghidra Assistant``, which is another personal project to make Ghidra more instrumentable.
 
+## Example devices
+Several example devices are under development to show what the Gupje is capable off:
+    * Nvidia Shield Tablet(boot bricked device) 
+      * Nintendo Switch to add?
+    * Samsung S7 (boot and hijack trustzone)
+    * Raspberry Pi4(UART)
+
 ## TODO
+
     * ARM assembly needs to be completely rewritten
     * Add code that allows the host to easily write and execute shellcode on the device. This will significantly decrease the size of the debugger. (extra page required)
     * Add a more *minimal* approach to the debugger. That does not store data but can just be used to read/write memory. Usefull for exploitation when there is a very limited constraint on shellcode size.
@@ -91,19 +112,9 @@ This code works in combination with the ``Ghidra Assistant``, which is another p
     * Build an emulator to explain the debugger
 
 ### ARM64
-    * Allow restoring all registers by writing X15 to SP and jump to ELRn to create a *full* restored state. Figure out a way to branch without corrupting X15.
+    * Allow restoring all registers by writing X15 to SP and jump to ELRn to create a *full* restored state. Figure out a way to branch without corrupting X15. (ELR?)
 
 ### Thumb
     * headless mode is not supported
     * Figure out VBAR to implement single step debugging
 
-## Building
-Download an Android NDK and set it's root path:
-```bash
-$ export ANDROID_NDK_ROOT=$TOOLCHAINENV/android-ndk-r21_Linux
-```
-
-Now you can build one of your targets:
-```bash
-$ make -f devices/pixel3a/Makefile
-```

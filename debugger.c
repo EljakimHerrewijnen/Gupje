@@ -9,6 +9,14 @@
 // extern int mystrlen(char *data);
 // extern void usb_log(char * msg, uint32_t * error);
 
+#if INTPTR_MAX == INT32_MAX
+    #define BIT32
+#elif INTPTR_MAX == INT64_MAX
+    #define BIT64
+#else
+    #error "Environment not 32 or 64-bit."
+#endif
+
 #ifdef __aarch64__
 #include "debugger_archs/ga_arm64.h"
 #elif __arm__
@@ -16,7 +24,7 @@
 #elif __thumb__
 #include "debugger_archs/ga_arm_thumb.h"
 #else
-#include "debugger_archs/ga_arm64.h"
+#error "Unsupported architecture"
 #endif
 
 #ifdef GLITCH_ENABLE
@@ -31,13 +39,18 @@ extern void debugger_sync_special_regs();
 extern void restore_and_return();
 
 extern int debugger_storage;
-// uint64_t debugger_storage_values[] = &debugger_storage;
+
+// Custom block sizes should be somewhat supported.
+#ifdef GUPJE_BLOCK_SIZE
+#else
 #define GUPJE_BLOCK_SIZE 0x100
+#endif
+
 
 __attribute__((section(".init")))
 int debugger_main(void){
     #ifdef DEVICE_SETUP
-    #ifdef __aarch64__
+    #ifdef BIT64
     uint64_t *val = (uint64_t *)((uint64_t)debugger_storage);
 
     // 0xfc0
@@ -52,7 +65,7 @@ int debugger_main(void){
     // TODO other architectures
     #endif
 
-    #ifdef __aarch64__
+    #ifdef BIT64
     uint64_t mem_off;
     #else
     uint32_t mem_off;
@@ -66,14 +79,15 @@ int debugger_main(void){
 
     while(1){
         recv_data(&data, 4);
+        // PING, PEEK, HWIO, POKE, SELF, MAIN, FLUSH, JUMP, SYNC, SYNS, SPEC, ERET, REST, RET, TEST
         if(data[0] == 'P' && data[1] == 'I' && data[2] == 'N' && data[3] == 'G'){
             data[1] = 'O';
             send(&data, 4, &tx_err_code);
         }
         else if(data[0] == 'P' && data[1] == 'E' && data[2] == 'E' && data[3] == 'K') {
-            // peek, dump memory
+            // PEEK, dump memory
             recv_data(&data, 12); // Receive uint64_t size and and uint32_t offset
-            #ifdef __aarch64__
+            #ifdef BIT64
             mem_off = *(uint64_t *)data;
             mem_sz = *(uint32_t *)(data+8);
             #else
@@ -109,7 +123,7 @@ int debugger_main(void){
             usb_log("OK", &tx_err_code);
         }
         else if(data[0] == 'P' && data[1] == 'O' && data[2] == 'K' && data[3] == 'E') {
-            #ifdef __aarch64__
+            #ifdef BIT64
             recv_data(&data, 12); // Receive uint64_t size and and uint32_t offset
             mem_off = *(uint64_t *)data;
             mem_sz = *(uint32_t *)(data+8);
@@ -136,7 +150,7 @@ int debugger_main(void){
             }
         }
         else if(data[0] == 'S' && data[1] == 'E' && data[2] == 'L' && data[3] == 'F') {
-            #ifdef __aarch64__
+            #ifdef BIT64
             mem_off = (uint64_t) &debugger_main;
             #else
             mem_off = (uint32_t) &debugger_main;
@@ -144,7 +158,7 @@ int debugger_main(void){
             send(&mem_off, sizeof(mem_off), &tx_err_code);
         }
         else if(data[0] == 'M' && data[1] == 'A' && data[2] == 'I' && data[3] == 'N') {
-            #ifdef __aarch64__
+            #ifdef BIT64
             mem_off = (uint64_t) &debugger_main;
             #else
             mem_off = (uint32_t) &debugger_main;
@@ -152,8 +166,8 @@ int debugger_main(void){
             concrete_main(mem_off);
         }
         else if(data[0] == 'F' && data[1] == 'L' && data[2] == 'S' && data[3] == 'H') {
-            //FLSH cache flush
-            #ifdef __aarch64__
+            // TODO, flush specific cache (code/data)
+            #ifdef BIT64
             cache_flush();
             #else
             // Todo for ARM and Thumb
@@ -161,7 +175,7 @@ int debugger_main(void){
         }
         else if(data[0] == 'J' && data[1] == 'U' && data[2] == 'M' && data[3] == 'P') {
             //JUMP == jump to function using provided pointer
-            #ifdef __aarch64__
+            #ifdef BIT64
             recv_data(&data, 8);
             mem_off = *(uint64_t *)data;
             void (*custom_func)() = (void*)mem_off; //mem_off;

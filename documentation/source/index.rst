@@ -5,14 +5,23 @@
 
 Gupje Architecture based debugger
 =================================
-This is the documentation for the Gupje debugger.
+This is the documentation for the ``Gupje`` debugger.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Setup:
 
    overview.rst
+   getting_started.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example Targets:
+
+   targets/rpi4.rst
+   targets/nvidia_shield.rst
+   targets/samsung_s7.rst
 
 .. toctree::
    :maxdepth: 2
