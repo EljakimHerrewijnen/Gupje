@@ -1,5 +1,5 @@
 # Gupje
-Gupje is a bare metal architecture based stub debugger that helps in ``post-exploitation`` steps. Like booting a smartphone after RCE has been achieved. Gupje is also capable of doing ``hardware-in-the-middle`` approaches as well as keeping control over a device while it is booting(Hijack trustzone etc.).
+Gupje is a bare metal architecture based stub debugger that helps in ``post-exploitation`` steps. Like booting a smartphone after RCE has been achieved. Gupje is also capable of doing ``hardware-in-the-middle`` approaches as well as keeping control over a device while it is booting, this is needed for reaching weird goals like hijacking ``trustzone``.
 
 Gupje currently supporting the following architectures:
     * ARM64 (good support)
@@ -12,7 +12,7 @@ The only actual things the debugger can do is:
     * Send/Receive (needs to be implemented by the user)
     * Read/Write *some* registers
 
-These functions are enough for a processor to run properly. The code size of the debugger is currently smaller than 4096 bytes(depends a bit on user setup) but will probably grow to include 1 extra page to support custom functionality. Like dumping extra registers and more specific VBAR setups. 
+These functions are enough for a processor to run properly. The code size of the debugger is currently smaller than 4096 bytes(depends a bit on user setup) but will probably grow to include 1 extra page to support custom functionality. Like dumping extra registers and more specific processor dependent code. 
 
 In the future it should also be possible to add fuzzing and same architecture rehosting. Once I find a project to implement this at least.
 
@@ -21,7 +21,7 @@ A simple overview of how Gupje is meant to be used can be seen below:
 
 ![Simple Gupje Target](simple_device.drawio.svg)
 
-The user is responsible for gaining RCE and setting up Gupje. After this Gupje, along with the ``Ghidra-Assistant``, can be used to interact with the device from within python and continue booting(or extract Crypte Engine keys or whatever).
+The user is responsible for gaining RCE and setting up Gupje. After this Gupje, along with the ``Ghidra-Assistant``, can be used to interact with the device from within python and continue booting(or extract Crypto Engine keys or whatever).
 
 ### Gupje Setup
 Because Gupje attempts to be a architecture based debugger the user only has to provide send/receive functionality to Gupje. Like sahara_tx/sahara_rx in Qualcomm based devices or a raw USB endpoint for the nvidia shield tablet.
@@ -94,7 +94,7 @@ make livehtml
 ```
 Install the python dependencies if they are missing. 
 
-This code works in combination with the ``Ghidra Assistant``, which is another personal project to make Ghidra more instrumentable.
+This code works in combination with the ``Ghidra Assistant``, which is another personal project to make Ghidra more instrumentable. 
 
 ## Example devices
 Several example devices are under development to show what the Gupje is capable off:
@@ -104,8 +104,7 @@ Several example devices are under development to show what the Gupje is capable 
     * Raspberry Pi4(UART)
 
 ## TODO
-
-    * ARM assembly needs to be completely rewritten
+    * Support an Iphone (7? 11?)
     * Add code that allows the host to easily write and execute shellcode on the device. This will significantly decrease the size of the debugger. (extra page required)
     * Add a more *minimal* approach to the debugger. That does not store data but can just be used to read/write memory. Usefull for exploitation when there is a very limited constraint on shellcode size.
     * Implement code block stepping.
