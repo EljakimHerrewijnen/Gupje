@@ -2,6 +2,7 @@
 Gupje is a bare metal architecture based stub debugger that helps in ``post-exploitation`` steps. Like booting a smartphone after RCE has been achieved. Gupje is also capable of doing ``hardware-in-the-middle`` approaches as well as keeping control over a device while it is booting, this is needed for reaching weird goals like hijacking ``trustzone``.
 
 Gupje currently supporting the following architectures:
+
     * ARM64 (good support)
     * ARM (minimal)
     * ARM Thumb (decent support)
@@ -9,12 +10,13 @@ Gupje currently supporting the following architectures:
 The goal is to add support to more targets while I work on them. Because I mainly work on phones this list will probably not grow a lot in the short term. But if you have an interesting target and preferably a way to get into it(RCE), let me know and I will look into it.
 
 The only actual things the debugger can do is:
+
     * Send/Receive (needs to be implemented by the user)
     * Read/Write *some* registers
 
-These functions are enough for a processor to run properly. The code size of the debugger is currently smaller than 4096 bytes(depends a bit on user setup) but will probably grow to include 1 extra page to support custom functionality. Like dumping extra registers and more specific processor dependent code. 
+These functions are enough for a processor to run. The code size of the debugger is currently smaller than 4096 bytes(depends a bit on user setup) but will probably grow to include 1 extra page to support custom functionality. Like dumping extra registers and more specific processor dependent code. 
 
-In the future it should also be possible to add fuzzing and same architecture rehosting. Once I find a project to implement this at least.
+In the future it should also be possible to add fuzzing and same architecture rehosting for more advanced fuzzing. Once I find a project to implement this at least.
 
 ## Overview
 A simple overview of how Gupje is meant to be used can be seen below:
