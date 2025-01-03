@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" data-content_root="../../">
+<head>
+    <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+        <title>ARM &mdash; gupje  documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/dist/fontawesome.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dist/theme.css?v=310cf088" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/drawio.css" />
+            <link rel="index" title="Index" href="../../genindex.html" />
+            <link rel="search" title="Search" href="../../search.html" />
+            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="next" title="ARM Thumb Mode" href="../arm_thumb/index.html" />
+            <link rel="prev" title="ARM64" href="../arm64/index.html" />
+    </head>
+<body>
+    <script type="text/javascript" src="../../_static/dist/blocking.js"></script>
+    <header class="container-fluid bg-primary">
+        <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
+        <div class="container-fluid">
+            <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
+                    <a href="../../index.html"
+                        title="Wagtail"
+                        class="logo navbar-brand"
+                    >
+                        <img src="../../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                            class="logo-img"
+                        />
+                        Sphinx Wagtail Theme
+                    </a>
+                
+                
+                <button class="navbar-toggler btn btn-primary d-lg-none" type="button" data-toggle="collapse" data-target="#collapseSidebar" aria-expanded="false" aria-controls="collapseExample">
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="sr-only">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-12 col-lg-3 sidebar-container">
+                <div id="collapseSidebar" class="collapse sticky-top d-lg-block pt-5 pr-lg-4">
+<div id="searchbox" class="searchbox mb-6 px-1" role="search">
+    <form id="search-form" action="../../search.html" autocomplete="off" method="get" role="search">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text border-right-0 bg-white py-3 pl-3 pr-2"><span class="fas fa-search"></span></div>
+            </div>
+            <input class="form-control py-3 pr-3 pl-1 h-100 border-left-0" type="search" name="q" placeholder="Search documentation" aria-label="Search documentation" id="searchinput" />
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div><div class="site-toc">
+    <nav class="toc mt-3" aria-label="Main menu">
+        <p class="caption" role="heading"><span class="caption-text">Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Gupje overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Example Targets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../targets/rpi4.html">Raspberry Pi 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../targets/nvidia_shield.html">Nvidia Shield Tablet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../targets/samsung_s7.html">Samsung S7</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architectures:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../arm64/index.html">ARM64</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ARM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arm_thumb/index.html">ARM Thumb Mode</a></li>
+</ul>
+
+    </nav>
+    <template data-toggle-item-template>
+        <button class="btn btn-sm btn-link toctree-expand" type="button">
+            <span class="sr-only">Toggle menu contents</span>
+        </button>
+    </template>
+</div>
+                    <div class="d-lg-none border-bottom">
+                        
+                    </div>
+                </div>
+            </aside>
+            <div class="col-12 col-lg-9 pt-5">
+                <header class="row align-items-baseline">
+                    <div class="col">
+                        <nav aria-label="breadcrumb">
+    <ol class="breadcrumb m-0 p-0 bg-transparent">
+        <li class="breadcrumb-item"><a href="../../index.html">Docs</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ARM</li>
+    </ol>
+</nav>
+                    </div>
+                    <div class="col-sm-12 col-lg-auto mt-3 mt-lg-3">
+                        <noscript>
+                            <p>JavaScript is required to toggle light/dark mode..</p>
+                        </noscript>
+                        <button id="wagtail-theme" class="btn btn-sm btn-light text-decoration-none" type="button">
+                            <span class="dark-only"><i class="fas fa-sun"></i> Light mode</span>
+                            <span class="light-only"><i class="fas fa-moon"></i> Dark mode</span>
+                        </button>
+    <a class="btn btn-sm btn-light text-decoration-none" href="https://github.com/wagtail/sphinx_wagtail_theme/blob/main/docs/architectures/arm/index.rst" rel="nofollow">
+        <span class="btn-icon"><span class="fab fa-github"></span></span>
+        <span class="btn-text">Edit on GitHub</span>
+    </a>
+    <a class="btn btn-sm btn-light text-decoration-none" href="../../_sources/architectures/arm/index.rst.txt" rel="nofollow">
+        <span class="btn-icon"><span class="fas fa-code"></span></span>
+        <span class="btn-text">View source</span>
+    </a>
+                        
+                    </div>
+                </header>
+                <div class="row" >
+                    <div class="col-12">
+                        <hr class="w-100 my-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-9 order-last order-lg-first rst-content">
+                        <main role="main" id="main">
+    <section id="arm">
+<h1>ARM<a class="headerlink" href="#arm" title="Link to this heading">¶</a></h1>
+<section id="debugger-storage-overview-on-arm">
+<h2>Debugger Storage Overview on ARM<a class="headerlink" href="#debugger-storage-overview-on-arm" title="Link to this heading">¶</a></h2>
+<p>Overview of the storage setup on ARM Thumb for the debugger.
+To interact with this storage dump you can either dump the storage location and parse the entries or use the <em>utils/debugger/debugger_archs/armT_processor_state.py</em> processor state, which is also passed as an argument in <strong>GA_arm_thumb_debugger</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All addresses below asume <code class="docutils literal notranslate"><span class="pre">STORAGE_LOCATION</span></code> + <strong>Address</strong></p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Address</p></th>
+<th class="head"><p>Function</p></th>
+<th class="head"><p>Comment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0</p></td>
+<td><p>R0</p></td>
+<td><p>Stores Register R0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x4</p></td>
+<td><p>R1</p></td>
+<td><p>Stores Register R1</p></td>
+</tr>
+<tr class="row-even"><td><p>0x8</p></td>
+<td><p>R2</p></td>
+<td><p>Stores Register R2</p></td>
+</tr>
+<tr class="row-odd"><td><p>0xc</p></td>
+<td><p>R3</p></td>
+<td><p>Stores Register R3</p></td>
+</tr>
+<tr class="row-even"><td><p>0x10</p></td>
+<td><p>R4</p></td>
+<td><p>Stores Register R4</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x14</p></td>
+<td><p>R5</p></td>
+<td><p>Stores Register R5</p></td>
+</tr>
+<tr class="row-even"><td><p>0x18</p></td>
+<td><p>R6</p></td>
+<td><p>Stores Register R6</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x1c</p></td>
+<td><p>R7</p></td>
+<td><p>Stores Register R7</p></td>
+</tr>
+<tr class="row-even"><td><p>0x20</p></td>
+<td><p>R8</p></td>
+<td><p>Stores Register R8 (Indirect Function Call Target <code class="docutils literal notranslate"><span class="pre">IFC</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x24</p></td>
+<td><p>R9</p></td>
+<td><p>Stores Register R9 (Platform Register <code class="docutils literal notranslate"><span class="pre">P</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>0x28</p></td>
+<td><p>R10</p></td>
+<td><p>Stores Register R10 (Thread Pointer <code class="docutils literal notranslate"><span class="pre">TP</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x2c</p></td>
+<td><p>R11</p></td>
+<td><p>Stores Register R11 (Frame Pointer <code class="docutils literal notranslate"><span class="pre">FP</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>0x30</p></td>
+<td><p>R12</p></td>
+<td><p>Stores Register R12 (Intra-Procedure-call-scratched-Register <code class="docutils literal notranslate"><span class="pre">IP</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x34</p></td>
+<td><p>R13</p></td>
+<td><p>Stores Register R13 (Stack Pointer <code class="docutils literal notranslate"><span class="pre">SP</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>0x38</p></td>
+<td><p>R14</p></td>
+<td><p>Stores Register R14 (Link Register <code class="docutils literal notranslate"><span class="pre">LR</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x3c</p></td>
+<td><p>R15</p></td>
+<td><p>Stores Register R15 (Program Counter <code class="docutils literal notranslate"><span class="pre">PC</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>0x7d8</p></td>
+<td><p>DBG_MMU_DISABLE</p></td>
+<td><p><strong>DISABLED</strong> <code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Disable the MMU on entry and enable the MMU on leave</p></td>
+</tr>
+<tr class="row-even"><td><p>0x7ec</p></td>
+<td><p>DBG_JUMP_TO</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Address to jump to instead of the debugger</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x7f0</p></td>
+<td><p>DBG_CONT_EXEC</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Do not jump in debugger but into</p></td>
+</tr>
+<tr class="row-even"><td><p>0x7f4</p></td>
+<td><p>TEMP X0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Temporary storage for X0 value</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x7f8</p></td>
+<td><p>Store X0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Stores exception id for the <code class="docutils literal notranslate"><span class="pre">SMC</span></code> call</p></td>
+</tr>
+<tr class="row-even"><td><p>0x7fc</p></td>
+<td><p>JUMP_ADDR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Memory location that instructs the debugger where to jump to</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+</main>
+                        <nav aria-label="Page navigation" class="py-4 my-5 clearfix font-weight-bold border-top">
+    <a class="float-left" href="../arm64/index.html" title="Previous">
+        <span aria-hidden="true">←&nbsp;</span>ARM64
+    </a>
+    <a class="float-right" href="../arm_thumb/index.html" title="Next">
+        ARM Thumb Mode <span aria-hidden="true">&nbsp;→</span>
+    </a>
+</nav>
+                    </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">ARM</a><ul>
+<li><a class="reference internal" href="#debugger-storage-overview-on-arm">Debugger Storage Overview on ARM</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="container-fluid bg-primary text-light">
+        <div class="container">
+            <div class="row">
+        <div class="col p-4">
+            
+                <nav aria-label="Footer">
+                    <ul class="nav justify-content-center mb-2">
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/features/">Features</a></li>
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/about-wagtail/"> About Wagtail</a></li>
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/services/"> Services</a></li>
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/blog/"> Blog</a></li>
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/packages/"> Packages</a></li>
+                        
+                            
+                            
+                            <li class="nav-item"><a class="nav-link text-light"  href="https://wagtail.org/developers/"> Developers</a></li>
+                        
+                    </ul>
+                </nav>
+            
+            <div class="text-center">
+                    &copy; Copyright 2024, Eljakim
+            </div>
+            <div class="text-center text-white-50 font-italic mt-3">
+                <small>
+                    Created using
+                    <a href="https://github.com/wagtail/sphinx_wagtail_theme" rel="nofollow" target="_blank">
+                        Sphinx Wagtail Theme 6.4.0
+                    </a>
+                    and
+                    <a href="https://www.sphinx-doc.org/" rel="nofollow" target="_blank">
+                        Sphinx 8.1.3
+                    </a>
+                </small>
+            </div>
+        </div>
+    </div>
+        </div>
+    </footer>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+        <script type="text/javascript" src="../../_static/dist/theme.js"></script>
+        <script type="text/javascript" src="../../_static/dist/vendor.js"></script>
+        <script type="text/javascript" src="../../_static/searchtools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() { Search.loadIndex("../../searchindex.js"); });
+        </script>
+        <script type="text/javascript" id="searchindexloader"></script>
+    </body>
+</html>
