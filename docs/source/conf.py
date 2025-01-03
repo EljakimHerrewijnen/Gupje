@@ -30,3 +30,16 @@ exclude_patterns = []
 
 html_theme = 'sphinx_wagtail_theme'
 html_static_path = ['_static']
+
+
+project = "Gupje"
+
+# These are options specifically for the Wagtail Theme.
+html_theme_options = dict(
+    project_name = "Gupje",
+    # logo = "img/wagtail-logo-circle.svg",
+    logo_alt = "Gupje",
+    logo_height = 59,
+    logo_url = "/",
+    logo_width = 45,
+)
