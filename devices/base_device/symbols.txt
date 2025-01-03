@@ -1,0 +1,6 @@
+send = 0x001065C0;
+recv = 0x00106612;
+
+
+debugger_storage = 0x40013000;
+debugger_stack = 0x40014000;
