@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Nvidia Shield Tablet &mdash; gupje  documentation</title>
+        <title>Nvidia Shield Tablet &mdash; Gupje  documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/dist/fontawesome.css" />
       <link rel="stylesheet" type="text/css" href="../_static/dist/theme.css?v=310cf088" />
@@ -14,7 +14,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/drawio.css" />
             <link rel="index" title="Index" href="../genindex.html" />
             <link rel="search" title="Search" href="../search.html" />
-            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="top" title="Gupje  documentation" href="#" />
             <link rel="next" title="Samsung S7" href="samsung_s7.html" />
             <link rel="prev" title="Raspberry Pi 4" href="rpi4.html" />
     </head>
@@ -24,14 +24,14 @@
         <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
         <div class="container-fluid">
             <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
-                    <a href="../index.html"
-                        title="Wagtail"
+                    <a href="/"
+                        title="Gupje"
                         class="logo navbar-brand"
                     >
-                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Gupje"
                             class="logo-img"
                         />
-                        Sphinx Wagtail Theme
+                        Gupje
                     </a>
                 
                 
@@ -128,7 +128,34 @@
                         <main role="main" id="main">
     <section id="nvidia-shield-tablet">
 <h1>Nvidia Shield Tablet<a class="headerlink" href="#nvidia-shield-tablet" title="Link to this heading">¶</a></h1>
-<p>See the code <a class="reference external" href="https://github.com/EljakimHerrewijnen/nvidia_shield">here</a></p>
+<p>Exploitation for this target was done by <a class="reference external" href="https://github.com/LordRafa">LordRafa</a></p>
+<p>The nvidia shield tablet, both st8 and k1 versions, have a Tegra K1 processor. This processor is based on the ARM Cortex A15 architecture.</p>
+<p>This processor has the same bootROM bug as the Nintendo Switch, allowing us to run code very early on in the processor.</p>
+<section id="code">
+<h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
+<p>The github code for this <a class="reference external" href="https://github.com/EljakimHerrewijnen/nvidia_shield">is here</a>.</p>
+</section>
+<section id="debugger-implementation">
+<h2>Debugger implementation<a class="headerlink" href="#debugger-implementation" title="Link to this heading">¶</a></h2>
+<p>The bootROM has 2 endpoint functions to read/write data over USB, which we can repurpose to send and receive data from the debugger.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define BOOTROM_EP1_IN_WRITE_IMM    0x001065C0</span>
+<span class="cp">#define BOOTROM_EP1_OUT_READ_IMM    0x00106612</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ep1_x_imm_t</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">num_xfer</span><span class="p">);</span>
+<span class="n">ep1_x_imm_t</span><span class="w"> </span><span class="n">usb_recv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ep1_x_imm_t</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">BOOTROM_EP1_OUT_READ_IMM</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span>
+<span class="n">ep1_x_imm_t</span><span class="w"> </span><span class="n">usb_send</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ep1_x_imm_t</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">BOOTROM_EP1_IN_WRITE_IMM</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">num_xfer</span><span class="p">){</span>
+<span class="w">    </span><span class="n">usb_send</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">num_xfer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">recv</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">num_xfer</span><span class="p">){</span>
+<span class="w">    </span><span class="n">usb_recv</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">num_xfer</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">num_xfer</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 </main>
@@ -141,6 +168,20 @@
     </a>
 </nav>
                     </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">Nvidia Shield Tablet</a><ul>
+<li><a class="reference internal" href="#code">Code</a></li>
+<li><a class="reference internal" href="#debugger-implementation">Debugger implementation</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
                     
                 </div>
             </div>

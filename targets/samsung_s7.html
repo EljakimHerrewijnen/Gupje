@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Samsung S7 &mdash; gupje  documentation</title>
+        <title>Samsung S7 &mdash; Gupje  documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/dist/fontawesome.css" />
       <link rel="stylesheet" type="text/css" href="../_static/dist/theme.css?v=310cf088" />
@@ -14,7 +14,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/drawio.css" />
             <link rel="index" title="Index" href="../genindex.html" />
             <link rel="search" title="Search" href="../search.html" />
-            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="top" title="Gupje  documentation" href="#" />
             <link rel="next" title="ARM64" href="../architectures/arm64/index.html" />
             <link rel="prev" title="Nvidia Shield Tablet" href="nvidia_shield.html" />
     </head>
@@ -24,14 +24,14 @@
         <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
         <div class="container-fluid">
             <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
-                    <a href="../index.html"
-                        title="Wagtail"
+                    <a href="/"
+                        title="Gupje"
                         class="logo navbar-brand"
                     >
-                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Gupje"
                             class="logo-img"
                         />
-                        Sphinx Wagtail Theme
+                        Gupje
                     </a>
                 
                 
@@ -128,7 +128,82 @@
                         <main role="main" id="main">
     <section id="samsung-s7">
 <h1>Samsung S7<a class="headerlink" href="#samsung-s7" title="Link to this heading">¶</a></h1>
-<p>Exploitation done by Frederick in <a class="reference external" href="https://fredericb.info/2020/06/exynos-usbdl-unsigned-code-loader-for-exynos-bootrom.html">his blog</a>.</p>
+<p>This is an example for a bit more complex target for running gupje.</p>
+<p>The Samsung S7 contains a bootROM vulnerability, discovered and exploited by Frederick in <a class="reference external" href="https://fredericb.info/2020/06/exynos-usbdl-unsigned-code-loader-for-exynos-bootrom.html">his blog</a>.</p>
+<p>The USB implementation for this target is more complex because it does not expose any <em>easy</em> send/receive functions. Instead the DWC3 event handling is processed in the bootROM.
+This means that we need to properly implement the event handling of the DWC3 controller in order to send and receive data, load the next stage and execute it. All in 502 bytes.</p>
+<section id="usb-implementation">
+<h2>USB implementation<a class="headerlink" href="#usb-implementation" title="Link to this heading">¶</a></h2>
+<p>Here is a quick run down of how the USB controller works for this device:</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">receiving</span></code> data, the usb controller needs to be setup to know what to do when data is received. A callback needs to be setup and the amount of data expected to come in.
+After that the transaction will be started, and a loop needs to be run in order to handle all the USB device events. One of the events that should happen at some point is the data receive function.
+The previously setup callback function should then process all the incomming data and raise some sort of signal that it is happy or done in order to stop the USB handling loop.
+So a simple call to receive data will look like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define recv_buffer 0x206fe00 </span><span class="c1">//0x02021800 + 0x3000</span>
+<span class="cp">#define data_received 0x206fd00</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">recv_data_cb</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">){</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dest_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">recv_buffer</span><span class="p">;</span>
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">data_received</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">rbuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_endpoint_recv_buffer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">        </span><span class="n">dest_buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)</span><span class="n">rbuf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Mark as ready</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">recv_data</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">){</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">data_received</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">maybe_usb_setup_read</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">recv_data_cb</span><span class="p">,</span><span class="w"> </span><span class="mh">0x200</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">rbuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_endpoint_recv_buffer</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="n">dwc3_ep0_start_trans</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">rbuf</span><span class="p">,</span><span class="w"> </span><span class="mh">0x200</span><span class="p">);</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="w">        </span><span class="n">usb_event_handler</span><span class="p">();</span>
+<span class="w">        </span><span class="k">volatile</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">val</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">){</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// Copy to destination location</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dest_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">address</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">        </span><span class="n">dest_buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)</span><span class="n">recv_buffer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">sending</span></code> the data the setup is somewhat the same. The data needs to be sent to the USB controller and a callback needs to be setup to know when the data has been sent.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">send_data_cb</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">){</span>
+<span class="w">    </span><span class="c1">// Tell event handler that the data was received</span>
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">data_received</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Mark as ready</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">error</span><span class="p">){</span>
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">data_received</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">maybe_usb_setup_read</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="w"> </span><span class="n">send_data_cb</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// uint32_t rbuf = get_endpoint_recv_buffer(1);</span>
+<span class="w">    </span><span class="n">dwc3_ep0_start_trans</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="w">        </span><span class="n">usb_event_handler</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">dref</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">){</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// exynos_sleep(1, 1000);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="stage-1">
+<h2>Stage 1<a class="headerlink" href="#stage-1" title="Link to this heading">¶</a></h2>
+<p>Due to size constraints the first stage is a simple loader that will load the second stage from the host. The second stage being the actual debugger.</p>
+</section>
 </section>
 
 </main>
@@ -141,6 +216,20 @@
     </a>
 </nav>
                     </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">Samsung S7</a><ul>
+<li><a class="reference internal" href="#usb-implementation">USB implementation</a></li>
+<li><a class="reference internal" href="#stage-1">Stage 1</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
                     
                 </div>
             </div>

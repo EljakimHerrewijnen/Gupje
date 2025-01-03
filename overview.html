@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Gupje overview &mdash; gupje  documentation</title>
+        <title>Gupje overview &mdash; Gupje  documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/dist/fontawesome.css" />
       <link rel="stylesheet" type="text/css" href="_static/dist/theme.css?v=310cf088" />
@@ -14,7 +14,7 @@
       <link rel="stylesheet" type="text/css" href="_static/drawio.css" />
             <link rel="index" title="Index" href="genindex.html" />
             <link rel="search" title="Search" href="search.html" />
-            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="top" title="Gupje  documentation" href="#" />
             <link rel="next" title="Getting Started" href="getting_started.html" />
             <link rel="prev" title="Gupje Architecture based debugger" href="index.html" />
     </head>
@@ -24,14 +24,14 @@
         <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
         <div class="container-fluid">
             <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
-                    <a href="index.html"
-                        title="Wagtail"
+                    <a href="/"
+                        title="Gupje"
                         class="logo navbar-brand"
                     >
-                        <img src="_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                        <img src="_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Gupje"
                             class="logo-img"
                         />
-                        Sphinx Wagtail Theme
+                        Gupje
                     </a>
                 
                 
@@ -147,31 +147,34 @@ When a new architecture is added the first thing that needs to be done is to imp
 <p>The debugger will then wait for commands from the host. The host can send commands to the debugger to read/write memory, jump to an address, etc.</p>
 <p>When the user is done it will send the <code class="docutils literal notranslate"><span class="pre">REST</span></code> command to the debugger. This will restore the state of the processor and jump to the address defined in <code class="docutils literal notranslate"><span class="pre">DEBUGGER_JUMP</span></code>.</p>
 <p>The debugger also uses a stack that is defined in the debugger. This is done to not taint the original stack of the processor.</p>
+</section>
 <section id="api">
-<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
 <p>The debugger has a simple API that is used to communicate with the device. The following commands are supported:</p>
-</section>
-</section>
 <section id="memory-read-peek">
-<h2>Memory Read(Peek)<a class="headerlink" href="#memory-read-peek" title="Link to this heading">¶</a></h2>
+<h3>Memory Read(Peek)<a class="headerlink" href="#memory-read-peek" title="Link to this heading">¶</a></h3>
 <p>Read an address in memory to the host.</p>
+<p>The packet that is send is always 12 bytes, but depending on the address space(32/64 bit) the address will be 4 or 8 bytes. The last 4 bytes are the amount of bytes to read.</p>
+<figure class="align-default">
+<img alt="_images/peek_cmd.drawio.svg" src="_images/peek_cmd.drawio.svg" />
+</figure>
 </section>
 <section id="memory-write-poke">
-<h2>Memory Write(Poke)<a class="headerlink" href="#memory-write-poke" title="Link to this heading">¶</a></h2>
+<h3>Memory Write(Poke)<a class="headerlink" href="#memory-write-poke" title="Link to this heading">¶</a></h3>
 <p>Write a buffer to an address in memory.</p>
 </section>
 <section id="get-debugger-main-self">
-<h2>Get debugger main(SELF)<a class="headerlink" href="#get-debugger-main-self" title="Link to this heading">¶</a></h2>
+<h3>Get debugger main(SELF)<a class="headerlink" href="#get-debugger-main-self" title="Link to this heading">¶</a></h3>
 <p>Get the main entry point of the debugger. This is used to jump to only the debugger without setting up the stack and registers again.
 This taints the device but is very usefull for debugging and showing where the debugger is in memory.</p>
 </section>
 <section id="concrete-main-main">
-<h2>Concrete main(MAIN)<a class="headerlink" href="#concrete-main-main" title="Link to this heading">¶</a></h2>
+<h3>Concrete main(MAIN)<a class="headerlink" href="#concrete-main-main" title="Link to this heading">¶</a></h3>
 <p>Execute the <code class="docutils literal notranslate"><span class="pre">concrete_main</span></code> function. This function is fully user customizable and can be used to implement custom functionality.
 Like executing boot stages in a Qualcomm bootROM.</p>
 </section>
 <section id="flush-cache-flsh">
-<h2>Flush Cache(FLSH)<a class="headerlink" href="#flush-cache-flsh" title="Link to this heading">¶</a></h2>
+<h3>Flush Cache(FLSH)<a class="headerlink" href="#flush-cache-flsh" title="Link to this heading">¶</a></h3>
 <p>Execute architecture specific instructions in order to flush the cache.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -179,19 +182,19 @@ Like executing boot stages in a Qualcomm bootROM.</p>
 </div>
 </section>
 <section id="jump-to-address-jump">
-<h2>Jump to address(JUMP)<a class="headerlink" href="#jump-to-address-jump" title="Link to this heading">¶</a></h2>
+<h3>Jump to address(JUMP)<a class="headerlink" href="#jump-to-address-jump" title="Link to this heading">¶</a></h3>
 <p>Simple function that will just jump to an address without restoring the stack or registers. Usefull for testing the debugger or relocating it.</p>
 </section>
 <section id="dump-special-registers-spec">
-<h2>Dump special registers(SPEC)<a class="headerlink" href="#dump-special-registers-spec" title="Link to this heading">¶</a></h2>
+<h3>Dump special registers(SPEC)<a class="headerlink" href="#dump-special-registers-spec" title="Link to this heading">¶</a></h3>
 <p>Will dump the special registers to the host. This is architecture dependent and will only dump the registers that are supported. For ARM64 checks for each exception level are implemented.</p>
 </section>
 <section id="synchronize-state-sync">
-<h2>Synchronize State(SYNC)<a class="headerlink" href="#synchronize-state-sync" title="Link to this heading">¶</a></h2>
+<h3>Synchronize State(SYNC)<a class="headerlink" href="#synchronize-state-sync" title="Link to this heading">¶</a></h3>
 <p>This function can be called from the debugger and will force write the registers from the saved state into the processor.</p>
 </section>
 <section id="sync-special-syns">
-<h2>Sync Special(SYNS)<a class="headerlink" href="#sync-special-syns" title="Link to this heading">¶</a></h2>
+<h3>Sync Special(SYNS)<a class="headerlink" href="#sync-special-syns" title="Link to this heading">¶</a></h3>
 <p>Will force write the special registers from the saved state into the processor. Usefull for overwriting the <code class="docutils literal notranslate"><span class="pre">VBAR_ELN</span></code> and others.
 Not all registers are supported here and in the future this will probably be changed to be code pushed from the host to save space and support all special registers.</p>
 <div class="admonition note">
@@ -200,7 +203,7 @@ Not all registers are supported here and in the future this will probably be cha
 </div>
 </section>
 <section id="restore-and-jump-rest">
-<h2>Restore and Jump(REST)<a class="headerlink" href="#restore-and-jump-rest" title="Link to this heading">¶</a></h2>
+<h3>Restore and Jump(REST)<a class="headerlink" href="#restore-and-jump-rest" title="Link to this heading">¶</a></h3>
 <p>This function restores the state of the processor from it’s internal storage and jump’s to the address defined in <code class="docutils literal notranslate"><span class="pre">DEBUGGER_JUMP</span></code>.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
@@ -208,17 +211,14 @@ Not all registers are supported here and in the future this will probably be cha
 </div>
 </section>
 <section id="restore-and-return-rret">
-<h2>Restore and Return(RRET)<a class="headerlink" href="#restore-and-return-rret" title="Link to this heading">¶</a></h2>
+<h3>Restore and Return(RRET)<a class="headerlink" href="#restore-and-return-rret" title="Link to this heading">¶</a></h3>
 <p>Does the same as <code class="docutils literal notranslate"><span class="pre">Restore</span> <span class="pre">and</span> <span class="pre">Jump</span></code> but instead of jumping it returns to the address that called the debugger(LR).</p>
+</section>
+</section>
 <section id="glitching">
-<h3>Glitching<a class="headerlink" href="#glitching" title="Link to this heading">¶</a></h3>
+<h2>Glitching<a class="headerlink" href="#glitching" title="Link to this heading">¶</a></h2>
 <p>A debug flag is added for adding glitching to the debugger. The command <code class="docutils literal notranslate"><span class="pre">GLIT</span></code> will jump to the glitch function but this is not very well implemented yet.
 The goal is to add several testable glitch cases to the debugger for profiling.</p>
-</section>
-<section id="features">
-<h3>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h3>
-<p>In a typical usecase the flow of the debugger would look as something like this:</p>
-</section>
 </section>
 </section>
 
@@ -238,10 +238,8 @@ The goal is to add several testable glitch cases to the debugger for profiling.<
                             <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
                             <ul>
 <li><a class="reference internal" href="#">Gupje overview</a><ul>
-<li><a class="reference internal" href="#inner-workings">Inner workings</a><ul>
-<li><a class="reference internal" href="#api">API</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#inner-workings">Inner workings</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#memory-read-peek">Memory Read(Peek)</a></li>
 <li><a class="reference internal" href="#memory-write-poke">Memory Write(Poke)</a></li>
 <li><a class="reference internal" href="#get-debugger-main-self">Get debugger main(SELF)</a></li>
@@ -252,11 +250,10 @@ The goal is to add several testable glitch cases to the debugger for profiling.<
 <li><a class="reference internal" href="#synchronize-state-sync">Synchronize State(SYNC)</a></li>
 <li><a class="reference internal" href="#sync-special-syns">Sync Special(SYNS)</a></li>
 <li><a class="reference internal" href="#restore-and-jump-rest">Restore and Jump(REST)</a></li>
-<li><a class="reference internal" href="#restore-and-return-rret">Restore and Return(RRET)</a><ul>
-<li><a class="reference internal" href="#glitching">Glitching</a></li>
-<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#restore-and-return-rret">Restore and Return(RRET)</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#glitching">Glitching</a></li>
 </ul>
 </li>
 </ul>

@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Raspberry Pi 4 &mdash; gupje  documentation</title>
+        <title>Raspberry Pi 4 &mdash; Gupje  documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/dist/fontawesome.css" />
       <link rel="stylesheet" type="text/css" href="../_static/dist/theme.css?v=310cf088" />
@@ -14,7 +14,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/drawio.css" />
             <link rel="index" title="Index" href="../genindex.html" />
             <link rel="search" title="Search" href="../search.html" />
-            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="top" title="Gupje  documentation" href="#" />
             <link rel="next" title="Nvidia Shield Tablet" href="nvidia_shield.html" />
             <link rel="prev" title="Getting Started" href="../getting_started.html" />
     </head>
@@ -24,14 +24,14 @@
         <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
         <div class="container-fluid">
             <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
-                    <a href="../index.html"
-                        title="Wagtail"
+                    <a href="/"
+                        title="Gupje"
                         class="logo navbar-brand"
                     >
-                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                        <img src="../_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Gupje"
                             class="logo-img"
                         />
-                        Sphinx Wagtail Theme
+                        Gupje
                     </a>
                 
                 
@@ -156,9 +156,11 @@ make<span class="w"> </span>-f<span class="w"> </span>devices/rpi4/Makefile
 <span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="nv">PREFIX</span><span class="o">=</span>aarch64-linux-gnu-<span class="w"> </span>make
 </pre></div>
 </div>
-<section id="implementation">
-<h4>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">¶</a></h4>
-<p>Only send and receive need to be implemented for this target. For this target UART is used.</p>
+</section>
+</section>
+<section id="debugger-implementation">
+<h2>Debugger Implementation<a class="headerlink" href="#debugger-implementation" title="Link to this heading">¶</a></h2>
+<p>Only send and receive need to be implemented. For this target UART is used.</p>
 <p>The debugger expects send/recv to be handled by the user so we need to build some logic to know that the data has been send and that the amount of expected data has been received. The following C code implements the send/recv for UART.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">recv_data</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">){</span>
 <span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
@@ -194,8 +196,6 @@ uart_send = 0x0000000000080384;
 <p>See the makefile for details on how the linking is done.</p>
 </section>
 </section>
-</section>
-</section>
 
 </main>
                         <nav aria-label="Page navigation" class="py-4 my-5 clearfix font-weight-bold border-top">
@@ -214,12 +214,10 @@ uart_send = 0x0000000000080384;
                             <ul>
 <li><a class="reference internal" href="#">Raspberry Pi 4</a><ul>
 <li><a class="reference internal" href="#code">Code</a><ul>
-<li><a class="reference internal" href="#running-qemu">Running Qemu</a><ul>
-<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#running-qemu">Running Qemu</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a class="reference internal" href="#debugger-implementation">Debugger Implementation</a></li>
 </ul>
 </li>
 </ul>

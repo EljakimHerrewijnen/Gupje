@@ -40,9 +40,10 @@ From ``devices/rpi4`` navigate to ``rpi4-baremetal-uart/`` folder and run make w
     ARCH=arm64 PREFIX=aarch64-linux-gnu- make
 
 
-Implementation
-==============
-Only send and receive need to be implemented for this target. For this target UART is used. 
+Debugger Implementation
+-----------------------
+
+Only send and receive need to be implemented. For this target UART is used.
 
 The debugger expects send/recv to be handled by the user so we need to build some logic to know that the data has been send and that the amount of expected data has been received. The following C code implements the send/recv for UART. 
 

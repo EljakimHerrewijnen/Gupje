@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Gupje Architecture based debugger &mdash; gupje  documentation</title>
+        <title>Gupje Architecture based debugger &mdash; Gupje  documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/dist/fontawesome.css" />
       <link rel="stylesheet" type="text/css" href="_static/dist/theme.css?v=310cf088" />
@@ -14,7 +14,7 @@
       <link rel="stylesheet" type="text/css" href="_static/drawio.css" />
             <link rel="index" title="Index" href="genindex.html" />
             <link rel="search" title="Search" href="search.html" />
-            <link rel="top" title="gupje  documentation" href="#" />
+            <link rel="top" title="Gupje  documentation" href="#" />
             <link rel="next" title="Gupje overview" href="overview.html" />
     </head>
 <body>
@@ -23,14 +23,14 @@
         <a class="btn btn-sm btn-light skip-to-content-link" href="#main">Skip to content</a>
         <div class="container-fluid">
             <div class="navbar navbar-expand-lg navbar-dark font-weight-bold">
-                    <a href="#"
-                        title="Wagtail"
+                    <a href="/"
+                        title="Gupje"
                         class="logo navbar-brand"
                     >
-                        <img src="_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Wagtail"
+                        <img src="_static/img/wagtail-logo-circle.svg" width="45" height="59" alt="Gupje"
                             class="logo-img"
                         />
-                        Sphinx Wagtail Theme
+                        Gupje
                     </a>
                 
                 
@@ -132,25 +132,22 @@
 <p class="caption" role="heading"><span class="caption-text">Setup:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Gupje overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#inner-workings">Inner workings</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="overview.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#inner-workings">Inner workings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#memory-read-peek">Memory Read(Peek)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#memory-write-poke">Memory Write(Poke)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#get-debugger-main-self">Get debugger main(SELF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#concrete-main-main">Concrete main(MAIN)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#flush-cache-flsh">Flush Cache(FLSH)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#jump-to-address-jump">Jump to address(JUMP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#dump-special-registers-spec">Dump special registers(SPEC)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#synchronize-state-sync">Synchronize State(SYNC)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#sync-special-syns">Sync Special(SYNS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#restore-and-jump-rest">Restore and Jump(REST)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#restore-and-return-rret">Restore and Return(RRET)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#memory-read-peek">Memory Read(Peek)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#memory-write-poke">Memory Write(Poke)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#get-debugger-main-self">Get debugger main(SELF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#concrete-main-main">Concrete main(MAIN)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#flush-cache-flsh">Flush Cache(FLSH)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#jump-to-address-jump">Jump to address(JUMP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#dump-special-registers-spec">Dump special registers(SPEC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#synchronize-state-sync">Synchronize State(SYNC)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#sync-special-syns">Sync Special(SYNS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#restore-and-jump-rest">Restore and Jump(REST)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#restore-and-return-rret">Restore and Return(RRET)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="overview.html#glitching">Glitching</a></li>
-<li class="toctree-l3"><a class="reference internal" href="overview.html#features">Features</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#glitching">Glitching</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
@@ -165,10 +162,19 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="targets/rpi4.html">Raspberry Pi 4</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="targets/rpi4.html#code">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="targets/rpi4.html#debugger-implementation">Debugger Implementation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="targets/nvidia_shield.html">Nvidia Shield Tablet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="targets/samsung_s7.html">Samsung S7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="targets/nvidia_shield.html">Nvidia Shield Tablet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="targets/nvidia_shield.html#code">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="targets/nvidia_shield.html#debugger-implementation">Debugger implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="targets/samsung_s7.html">Samsung S7</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="targets/samsung_s7.html#usb-implementation">USB implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="targets/samsung_s7.html#stage-1">Stage 1</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
