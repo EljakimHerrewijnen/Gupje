@@ -1,7 +1,0 @@
-[submodule "devices/rpi4_gupje"]
-	path = devices/rpi4_gupje
-	url = https://github.com/EljakimHerrewijnen/rpi4_gupje.git
-	branch = main
-[submodule "devices/nvidia_shield"]
-	path = devices/nvidia_shield
-	url = git@github.com:EljakimHerrewijnen/nvidia_shield.git
