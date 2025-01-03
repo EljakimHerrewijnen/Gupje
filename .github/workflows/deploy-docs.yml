@@ -1,5 +1,10 @@
 name: Deploy Sphinx Docs to GitHub Pages
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 on:
   push:
     branches:
@@ -8,8 +13,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
