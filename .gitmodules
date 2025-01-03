@@ -5,3 +5,4 @@
 [submodule "devices/nvidia_shield"]
 	path = devices/nvidia_shield
 	url = git@github.com:EljakimHerrewijnen/nvidia_shield.git
+	branch = master
