@@ -1,0 +1,4 @@
+myst_parser
+sphinx_wagtail_theme
+sphinxcontrib-confluencebuilder
+sphinxcontrib-drawio
