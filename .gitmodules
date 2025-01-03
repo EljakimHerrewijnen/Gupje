@@ -1,0 +1,3 @@
+[submodule "devices/rpi4_gupje"]
+	path = devices/rpi4_gupje
+	url = https://github.com/EljakimHerrewijnen/rpi4_gupje.git

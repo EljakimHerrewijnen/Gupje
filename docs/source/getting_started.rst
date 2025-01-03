@@ -6,7 +6,7 @@ Clone gupje somewhere on your system:
 
 .. code-block:: bash
 
-    git clone https://git.herreweb.nl/EljakimHerrewijnen/Gupje
+    git clone --recursive https://git.herreweb.nl/EljakimHerrewijnen/Gupje
 
 
 Cross compiler
