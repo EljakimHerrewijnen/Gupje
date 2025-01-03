@@ -46,8 +46,11 @@ Each Exception Level has its own stack pointers. The registers for these are:
 Debugger VBAR Implementation
 ****************************
 
+.. caution:: Docs are incomplete!
+
+
 The debugger uses a SMC call to insert a breakpoint at any address. When a SMC call is thrown the processor jumps to the address pointed to in the ``VBAR_EL3`` register. 
-This register **has to ** point to the debugger. 
+This register **has to** point to the debugger. 
 The debugger will first store all the registers in the storage location, overwrite the stack pointer and send the hello message ``b'GiAs'`` to the host. 
 
 An overview of what is happening when a SMC call is dan can be seen below:

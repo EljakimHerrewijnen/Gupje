@@ -100,12 +100,15 @@ This code works in combination with the ``Ghidra Assistant``, which is another p
 
 ## Example devices
 Several example devices are under development to show what the Gupje is capable off:
+
     * Nvidia Shield Tablet(boot bricked device) 
       * Nintendo Switch to add?
     * Samsung S7 (boot and hijack trustzone)
     * Raspberry Pi4(UART)
+    * Iphone?
 
 ## TODO
+
     * Support an Iphone (7? 11?)
     * Add code that allows the host to easily write and execute shellcode on the device. This will significantly decrease the size of the debugger. (extra page required)
     * Add a more *minimal* approach to the debugger. That does not store data but can just be used to read/write memory. Usefull for exploitation when there is a very limited constraint on shellcode size.
@@ -113,7 +116,8 @@ Several example devices are under development to show what the Gupje is capable 
     * Build an emulator to explain the debugger
 
 ### ARM64
-    * Allow restoring all registers by writing X15 to SP and jump to ELRn to create a *full* restored state. Figure out a way to branch without corrupting X15. (ELR?)
+
+    * Allow restoring all registers by writing X15 to SP and jump to ELRn to create a *fully* restored state. Figure out a way to branch without corrupting X15. (ELR?)
 
 ### Thumb
     * headless mode is not supported
