@@ -468,39 +468,43 @@ For this the <code class="docutils literal notranslate"><span class="pre">ARM64_
 <td><p>CurrentEL</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-odd"><td><p>0x1c8</p></td>
+<td><p>NZCV</p></td>
+<td><p>Store processor condition flags</p></td>
+</tr>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>0xfc0</p></td>
+<tr class="row-odd"><td><p>0xfc0</p></td>
 <td><p>DBG_SETUP_JUMP</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Set to 0x77 to jump to <code class="docutils literal notranslate"><span class="pre">DBG_SETUP_JUMP_ADDRESS</span></code> and when DEVICE_SETUP=1</p></td>
 </tr>
-<tr class="row-odd"><td><p>0xfc8</p></td>
+<tr class="row-even"><td><p>0xfc8</p></td>
 <td><p>DBG_SETUP_JUMP_ADDRESS</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Address to jump to when <code class="docutils literal notranslate"><span class="pre">DBG_SETUP_JUMP</span></code> is set to <em>0x77</em></p></td>
 </tr>
-<tr class="row-even"><td><p>0xfd0</p></td>
+<tr class="row-odd"><td><p>0xfd0</p></td>
 <td><p>DBG_MMU_DISABLE</p></td>
 <td><p><strong>DISABLED</strong> <code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Disable the MMU on entry and enable the MMU on leave</p></td>
 </tr>
-<tr class="row-odd"><td><p>0xfd8</p></td>
+<tr class="row-even"><td><p>0xfd8</p></td>
 <td><p>DBG_JUMP_TO</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Address to jump to instead of the debugger</p></td>
 </tr>
-<tr class="row-even"><td><p>0xfe0</p></td>
+<tr class="row-odd"><td><p>0xfe0</p></td>
 <td><p>DBG_CONT_EXEC</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Do not jump in debugger but into</p></td>
 </tr>
-<tr class="row-odd"><td><p>0xfe8</p></td>
+<tr class="row-even"><td><p>0xfe8</p></td>
 <td><p>TEMP X0</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Temporary storage for X0 value</p></td>
 </tr>
-<tr class="row-even"><td><p>0xff0</p></td>
+<tr class="row-odd"><td><p>0xff0</p></td>
 <td><p>Store X0</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Stores exception id for the <code class="docutils literal notranslate"><span class="pre">SMC</span></code> call</p></td>
 </tr>
-<tr class="row-odd"><td><p>0xff8</p></td>
+<tr class="row-even"><td><p>0xff8</p></td>
 <td><p>JUMP_ADDR</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DEBUGGER</span></code> Memory location that instructs the debugger where to jump to</p></td>
 </tr>
