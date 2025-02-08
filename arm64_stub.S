@@ -1,39 +1,26 @@
 start:
     LDR X15, addr_debugger_storage
 
-    STR X0, [X15, #0]
-    STR X1, [X15, #8]
-    STR X2, [X15, #16]
-    STR X3, [X15, #24]
-    STR X4, [X15, #32]
-    STR X5, [X15, #40]
-    STR X6, [X15, #48]
-    STR X7, [X15, #56]
-    STR X8, [X15, #64]
-    STR X9, [X15, #72]
-    STR X10, [X15, #80]
-    STR X11, [X15, #88]
-    STR X12, [X15, #96]
-    STR X13, [X15, #104]
-    STR X14, [X15, #112]
-    STR X15, [X15, #120]
-    STR X16, [X15, #128]
-    STR X17, [X15, #136]
-    STR X18, [X15, #144]
-    STR X19, [X15, #152]
-    STR X20, [X15, #160]
-    STR X21, [X15, #168]
-    STR X22, [X15, #176]
-    STR X23, [X15, #184]
-    STR X24, [X15, #192]
-    STR X25, [X15, #200]
-    STR X26, [X15, #208]
-    STR X27, [X15, #216]
-    STR X28, [X15, #224]
-    STR X29, [X15, #232]
-    STR X30, [X15, #240]
-    MOV X0, SP
-    STR X0, [X15, #248]
+    STP        X0, X1, [X15, #0x0]
+    STP        X2, X3, [X15, #0x10]
+    STP        X4, X5, [X15, #0x20]
+    STP        X6, X7, [X15, #0x30]
+    STP        X8, X9, [X15, #0x40]
+    STP        X10, X11, [X15, #0x50]
+    STP        X12, X13, [X15, #0x60]
+    STP        X14, X15, [X15, #0x70]
+    STP        X16, X17, [X15, #0x80]
+    STP        X18, X19, [X15, #0x90]
+    STP        X20, X21, [X15, #0xa0]
+    STP        X22, X23, [X15, #0xb0]
+    STP        X24, X25, [X15, #0xc0]
+    STP        X26, X27, [X15, #0xd0]
+    STP        X28, X29, [X15, #0xe0]
+    STP        X30, X31, [X15, #0xf0]
+
+    # Store NZCV flags
+    MRS X0, NZCV
+    STR X0, [X15, #0x1c8]
 
     // Does not override the SP etc. TODO ELHER make configurable in debugger (during setup)
     // B debugger_main
@@ -394,6 +381,10 @@ restore_and_return:
     // Restore the stack pointer
     LDR X0, [X15, #248]
     MOV SP, X0
+
+    // Restore NZCV flags
+    LDR X0, [X15, #0x1c8]
+    MSR NZCV, X0
 
     // Also restore X0
     LDR X0, [X15, #0]
