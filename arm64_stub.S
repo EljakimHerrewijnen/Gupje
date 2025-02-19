@@ -91,6 +91,10 @@ restore_and_jump:
     LDR X0, [X15, #248]
     MOV SP, X0
 
+    // Restore NZCV flags
+    LDR X0, [X15, #0x1c8]
+    MSR NZCV, X0
+
     // Also restore X0
     LDR X0, [X15, #0]
 
