@@ -16,7 +16,11 @@ start:
     STP        X24, X25, [X15, #0xc0]
     STP        X26, X27, [X15, #0xd0]
     STP        X28, X29, [X15, #0xe0]
-    STP        X30, X31, [X15, #0xf0]
+
+    STR X30, [X15, #240]
+
+    MOV X0, SP
+    STR X0, [X15, #248]
 
     # Store NZCV flags
     MRS X0, NZCV
