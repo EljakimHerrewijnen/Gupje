@@ -1,7 +1,7 @@
 **********************************
 Debugger Storage Overview on ARM64
 **********************************
-Overview of the storage setup on ARM64 for the debugger. To interact with this storage dump you can either dump the storage location and parse the entries or use the *utils/debugger/debugger_archs/arm64_processor_state.py* processor state, which is also passed as an argument in **GA_arm64_debugger**. 
+Overview of the storage setup on ARM64 for the debugger. To interact with this storage dump you can either dump the storage location and parse the entries or use the *utils/debugger/debugger_archs/arm64_processor_state.py* processor state, which is also passed as an argument in **GA_arm64_debugger**.
 
 .. note:: All addresses below asume ``STORAGE_LOCATION`` + **Address**
 
@@ -124,6 +124,14 @@ Overview of the storage setup on ARM64 for the debugger. To interact with this s
 | 0x1c0   | CurrentEL              |                                                                                        |
 +---------+------------------------+----------------------------------------------------------------------------------------+
 | 0x1c8   | NZCV                   | Store processor condition flags                                                        |
++---------+------------------------+----------------------------------------------------------------------------------------+
+| 0x1d0   | DAIF                   |                                                                                        |
++---------+------------------------+----------------------------------------------------------------------------------------+
+| 0x1d8   | TTBR1_EL1              |                                                                                        |
++---------+------------------------+----------------------------------------------------------------------------------------+
+| 0x1e0   | VTCR_EL2               |                                                                                        |
++---------+------------------------+----------------------------------------------------------------------------------------+
+| 0x1e8   | VTTBR_EL2              |                                                                                        |
 +---------+------------------------+----------------------------------------------------------------------------------------+
 |         |                        |                                                                                        |
 +---------+------------------------+----------------------------------------------------------------------------------------+

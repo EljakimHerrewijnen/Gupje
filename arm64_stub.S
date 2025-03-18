@@ -34,6 +34,9 @@ start:
     MOV SP, X0
     MOV FP, X0
 
+    // Dump special registers
+    BL dump_special_regs
+
     // See if we need to disable the MMU on entry
     // LDR X0, [X15, #0xfd0]
     // CMP X0, #0x777 //Disable the MMU
@@ -102,7 +105,7 @@ restore_and_jump:
     // Also restore X0
     LDR X0, [X15, #0]
 
-    // Load target address and branch to it without setting the LR 
+    // Load target address and branch to it without setting the LR
     // JUMP_ADDR
     LDR X15, [X15, #4088]
     BR X15
@@ -160,6 +163,12 @@ dump_special_el2:
 
     MRS X0, MAIR_EL2
     STR X0, [X15, #432]
+
+    MRS X0, VTCR_EL2
+    STR X0, [X15, #0x1e0]
+
+    MRS X0, HCR_EL2
+    STR X0, [X15, #0x1f0]
 
     // also dump EL1
     B dump_special_el1
@@ -276,6 +285,9 @@ write_special_el2:
 
     LDR X0, [X15, #432]
     MSR MAIR_EL2, X0
+
+    LDR X0, [X15, #0x1e0]
+    MSR VTCR_EL2, X0
 
     BL write_special_el1
 
