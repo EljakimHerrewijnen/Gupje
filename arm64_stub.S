@@ -134,6 +134,9 @@ dump_special_el3:
     MRS X0, MAIR_EL3
     STR X0, [X15, #424]
 
+    MRS X0, SP_EL2
+    STR X0, [X15, #376]
+
     // Also dump el2, which will also dump el1
     B dump_special_el2
 
@@ -155,9 +158,6 @@ dump_special_el2:
     MRS X0, ELR_EL2
     STR X0, [X15, #360]
 
-    MRS X0, SP_EL2
-    STR X0, [X15, #376]
-
     MRS X0, SPSR_EL2
     STR X0, [X15, #408]
 
@@ -169,6 +169,10 @@ dump_special_el2:
 
     MRS X0, HCR_EL2
     STR X0, [X15, #0x1f0]
+
+    // see https://community.arm.com/support-forums/f/architectures-and-processors-forum/49184/difference-between-sp_el1-and-spsel-mov
+    MRS X0, SP_EL1
+    STR X0, [X15, #384]
 
     // also dump EL1
     B dump_special_el1
@@ -192,16 +196,16 @@ dump_special_el1:
     MRS X0, ELR_EL1
     STR X0, [X15, #368]
 
-    // see https://community.arm.com/support-forums/f/architectures-and-processors-forum/49184/difference-between-sp_el1-and-spsel-mov
-    // TODO for dumping with interactive shellcode?
-    // MRS X0, SP_EL1
-    // STR X0, [X15, #384]
-
     MRS X0, SPSR_EL1
     STR X0, [X15, #416]
 
     MRS X0, MAIR_EL1
     STR X0, [X15, #440]
+
+    // EL0 registers
+    MRS X0, SP_EL0
+    STR X0, [X15, #392]
+
     RET
 
 .text
@@ -217,13 +221,10 @@ dump_special_regs:
 
     cmp X0, #0b1000 // EL2
     BEQ dump_special_el2
+    
 
     cmp X0, #0b0100 // EL1
     BEQ dump_special_el1
-
-    // EL0 registers
-    MRS X0, SP_EL0
-    STR X0, [X15, #392]
 
     RET
 
@@ -350,7 +351,7 @@ debugger_sync_special_regs:
 .text
 .global debugger_dump_special_regs
 debugger_dump_special_regs:
-     BL dump_special_regs
+    BL dump_special_regs
     B debugger_main
 
 .text
