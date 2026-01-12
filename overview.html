@@ -139,8 +139,14 @@ A high level overview of how the memory mapping for this works is shown below.</
 </div>
 <section id="inner-workings">
 <h2>Inner workings<a class="headerlink" href="#inner-workings" title="Link to this heading">¶</a></h2>
-<p>When the debugger is entered it will save the state of the processor into it’s storage page. This is done in assembly and is architecture dependent.
-When a new architecture is added the first thing that needs to be done is to implement these functionalities.</p>
+<p>When the debugger is entered it will save the state of the processor into it’s storage page. This is done in assembly and is architecture dependent.</p>
+<figure class="align-default">
+<img alt="_images/debugger_storage.drawio.svg" src="_images/debugger_storage.drawio.svg" />
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When a new architecture is added the first thing that needs to be done is to implement these functionalities.</p>
+</div>
 <figure class="align-default">
 <img alt="_images/debugger_flow.drawio.svg" src="_images/debugger_flow.drawio.svg" />
 </figure>
@@ -215,6 +221,12 @@ Not all registers are supported here and in the future this will probably be cha
 <p>Does the same as <code class="docutils literal notranslate"><span class="pre">Restore</span> <span class="pre">and</span> <span class="pre">Jump</span></code> but instead of jumping it returns to the address that called the debugger(LR).</p>
 </section>
 </section>
+<section id="hardware-in-the-middle-hitm">
+<h2>Hardware in the Middle(HITM)<a class="headerlink" href="#hardware-in-the-middle-hitm" title="Link to this heading">¶</a></h2>
+<figure class="align-default">
+<img alt="_images/debugger_hitm.drawio.svg" src="_images/debugger_hitm.drawio.svg" />
+</figure>
+</section>
 <section id="glitching">
 <h2>Glitching<a class="headerlink" href="#glitching" title="Link to this heading">¶</a></h2>
 <p>A debug flag is added for adding glitching to the debugger. The command <code class="docutils literal notranslate"><span class="pre">GLIT</span></code> will jump to the glitch function but this is not very well implemented yet.
@@ -253,6 +265,7 @@ The goal is to add several testable glitch cases to the debugger for profiling.<
 <li><a class="reference internal" href="#restore-and-return-rret">Restore and Return(RRET)</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#hardware-in-the-middle-hitm">Hardware in the Middle(HITM)</a></li>
 <li><a class="reference internal" href="#glitching">Glitching</a></li>
 </ul>
 </li>
