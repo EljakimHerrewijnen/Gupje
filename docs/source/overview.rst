@@ -11,11 +11,18 @@ A high level overview of how the memory mapping for this works is shown below.
 
     In the future the debugger will probably grow to 4 pages, to include an extra page for the debugger to use in custom functionality.
 
+
 Inner workings
 --------------
 
 When the debugger is entered it will save the state of the processor into it's storage page. This is done in assembly and is architecture dependent.
-When a new architecture is added the first thing that needs to be done is to implement these functionalities.
+
+.. figure:: images/debugger_storage.drawio.svg
+
+.. note::
+
+    When a new architecture is added the first thing that needs to be done is to implement these functionalities.
+    
 
 .. figure:: images/debugger_flow.drawio.svg
 
@@ -24,6 +31,7 @@ The debugger will then wait for commands from the host. The host can send comman
 When the user is done it will send the ``REST`` command to the debugger. This will restore the state of the processor and jump to the address defined in ``DEBUGGER_JUMP``.
 
 The debugger also uses a stack that is defined in the debugger. This is done to not taint the original stack of the processor.
+
 
 API
 ---
@@ -92,6 +100,11 @@ Restore and Return(RRET)
 ========================
 Does the same as ``Restore and Jump`` but instead of jumping it returns to the address that called the debugger(LR).
 
+
+Hardware in the Middle(HITM)
+----------------------------
+
+.. figure:: images/debugger_hitm.drawio.svg
 
 
 Glitching
