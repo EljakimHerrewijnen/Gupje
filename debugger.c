@@ -19,6 +19,8 @@
 
 #ifdef __aarch64__
 #include "debugger_archs/ga_arm64.h"
+#elif __riscv
+#include "debugger_archs/ga_riscv.h"
 #elif __arm__
 #include "debugger_archs/ga_arm.h"
 #elif __thumb__

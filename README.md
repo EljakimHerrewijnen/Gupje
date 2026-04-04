@@ -25,6 +25,9 @@ A simple overview of how Gupje is meant to be used can be seen below:
 
 The user is responsible for gaining RCE and setting up Gupje. After this Gupje, along with the ``Ghidra-Assistant``, can be used to interact with the device from within python and continue booting(or extract Crypto Engine keys or whatever).
 
+## Quick Start
+
+
 ### Gupje Setup
 Because Gupje attempts to be a architecture based debugger the user only has to provide send/receive functionality to Gupje. Like sahara_tx/sahara_rx in Qualcomm based devices or a raw USB endpoint for the nvidia shield tablet.
 

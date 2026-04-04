@@ -214,7 +214,7 @@ dump_special_regs:
     LDR X15, addr_debugger_storage
 
     MRS X0, CurrentEL
-    STR X0, [X15, #448]
+    STR X0, [X15, #448] // CurrentEL location
 
     cmp X0, #0b1100 // EL3
     BEQ dump_special_el3
