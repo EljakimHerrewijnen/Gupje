@@ -40,7 +40,7 @@ extern void sync_debugger();
 extern void debugger_sync_special_regs();
 extern void restore_and_return();
 
-extern int debugger_storage;
+extern uint64_t debugger_storage[];
 
 // Custom block sizes should be somewhat supported.
 #ifdef GUPJE_BLOCK_SIZE
@@ -55,13 +55,16 @@ int debugger_main(void){
     #ifdef BIT64
     uint64_t *val = (uint64_t *)((uint64_t)debugger_storage);
 
-    // 0xfc0
-    if(val[504] == (uint64_t)0x77){
+    /* val[504] is at storage+0xFC0 (DBG_SETUP_JUMP written by host before REST). */
+    if (val[504] == (uint64_t)0x0){
+        device_setup();
+    }
+    else if(val[504] == (uint64_t)0x77){
         void (*custom_func)() = (void*)val[505]; //0xfc8
-        // custom_func();
+        custom_func();
     }
     else{
-        device_setup();
+        // Do nothing, the value is not 0x0 or 0x77
     }
     #endif
     // TODO other architectures
@@ -114,7 +117,7 @@ int debugger_main(void){
         }
         else if(data[0] == 'H' && data[1] == 'W' && data[2] == 'I' && data[3] == 'O') {
             //HWIO, write byte by byte
-            recv_data(&data, 0x20); 
+            recv_data(&data, 0x20);
             mem_off = *(uint32_t *)data;
             mem_sz = *(uint32_t *)(data+8);
             // Data is stored in the rest of the data buffer
