@@ -80,6 +80,7 @@ int debugger_main(void){
     uint32_t blk_sz;
     char cmd[12];
     char data[0x20];
+    uint8_t io_buf[0x100];   // scratch for RDIO/WRIO 32-bit MMIO transfers
     usb_log("GiAs", &tx_err_code);
 
     while(1){
@@ -124,6 +125,31 @@ int debugger_main(void){
             // No error checking on size, be carefull!
             for(unsigned int i=0;i<mem_sz;i++) {
                 *((uint8_t *)(mem_off+i)) = data[12+i];
+            }
+            usb_log("OK", &tx_err_code);
+        }
+        else if(data[0] == 'R' && data[1] == 'D' && data[2] == 'I' && data[3] == 'O') {
+            // RDIO, read memory-mapped IO with 32-bit (word) accesses. PEEK reads
+            // byte-by-byte, which returns garbage for word-only registers.
+            recv_data(&data, 12); // uint64_t addr + uint32_t size (bytes)
+            mem_off = *(uint64_t *)data;
+            mem_sz = *(uint32_t *)(data+8);
+            if(mem_sz > sizeof(io_buf)) mem_sz = sizeof(io_buf);
+            for(unsigned int i=0;i+4<=mem_sz;i+=4) {
+                *(uint32_t *)(io_buf+i) = *((volatile uint32_t *)(mem_off+i));
+            }
+            send(io_buf, mem_sz, &tx_err_code);
+        }
+        else if(data[0] == 'W' && data[1] == 'R' && data[2] == 'I' && data[3] == 'O') {
+            // WRIO, write memory-mapped IO with 32-bit (word) accesses. HWIO
+            // writes byte-by-byte, which corrupts word-only registers.
+            recv_data(&data, 12); // uint64_t addr + uint32_t size (bytes)
+            mem_off = *(uint64_t *)data;
+            mem_sz = *(uint32_t *)(data+8);
+            if(mem_sz > sizeof(io_buf)) mem_sz = sizeof(io_buf);
+            recv_data(io_buf, mem_sz);
+            for(unsigned int i=0;i+4<=mem_sz;i+=4) {
+                *((volatile uint32_t *)(mem_off+i)) = *(uint32_t *)(io_buf+i);
             }
             usb_log("OK", &tx_err_code);
         }
